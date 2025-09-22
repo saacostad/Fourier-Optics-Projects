@@ -104,7 +104,6 @@ def updateAll():
     convMask = convMask / convMask.max()  
 
     convMask = (convMask * 255).astype(np.uint8)
-    print(convMask.shape)
     TK_CONV_mask_image = ImageTk.PhotoImage(Image.fromarray(convMask).resize((renderImage, renderImage)))
 
     CONV_MASK_img_label.configure(image=TK_CONV_mask_image, text="")
@@ -146,7 +145,7 @@ secondImageTitleRow = 5
 
 analyseRow = 7
 
-renderImage = 351
+renderImage = 251
 
 ctk.set_appearance_mode("Dark") 
 ctk.set_default_color_theme("blue")
@@ -168,7 +167,7 @@ for c in range(3):
 
 """ Label and button to open the image """
 # Placeholder for the image
-image_label = ctk.CTkLabel(imgF, text="NO IMAGE LOADED", width=renderImage, height=renderImage, fg_color="black")
+image_label = ctk.CTkLabel(imgF, text="NO IMAGE LOADED", width=renderImage, height=renderImage, fg_color="Orange")
 image_label.grid(row = firstImageRow, column = 0, padx = 0, pady = 0, sticky = "")
 
 # Button to select image
@@ -181,7 +180,7 @@ image_title.grid(row=firstImageTitleRow, column = 0, sticky="s")
 
 """ Label and button to sample the image """
 # Placeholder for the sampled image
-sampled_img_label = ctk.CTkLabel(imgF, text="NO SAMPLED IMAGE", width=renderImage, height=renderImage, fg_color="black")
+sampled_img_label = ctk.CTkLabel(imgF, text="NO SAMPLED IMAGE", width=renderImage, height=renderImage, fg_color="orange")
 sampled_img_label.grid(row = secondImageRow, column = 0, padx = 0, pady = 0, sticky = "")
 
 # Entry for the sampling spacing
@@ -208,7 +207,7 @@ sample_entry.set(5)
 # Button to sample the thing
 sample_button = ctk.CTkButton(imgF, text="ANALYSE", command=updateAll,
                               fg_color = "orange",
-                              height = 60,
+                              height = 30,
                               text_color = "black")
 sample_button.grid(row=selectionButtonsRow, column=2, padx=0, pady=0, sticky="")
 
@@ -219,12 +218,12 @@ sample_button.grid(row=selectionButtonsRow, column=2, padx=0, pady=0, sticky="")
 S_image_title = ctk.CTkLabel(imgF, text = "SAMPLED IMAGE", corner_radius=0)
 S_image_title.grid(row=secondImageTitleRow, column = 0)
 
-FFTSPEC_img_label = ctk.CTkLabel(imgF, text="NO SPECTRUM IMAGE", width=renderImage, height=renderImage, fg_color="black")
+FFTSPEC_img_label = ctk.CTkLabel(imgF, text="NO SPECTRUM IMAGE", width=renderImage, height=renderImage, fg_color="orange")
 FFTSPEC_img_label.grid(row = firstImageRow, column = 1, padx = 0, pady = 0, sticky = "")
 
 
 """ Menu for mask selection in the spectra """
-mask_options = ["none", "square", "circle", "Hann"]
+mask_options = ["NONE", "SQUARE", "CIRCLE", "HANN"]
 mask_menu = ctk.CTkOptionMenu(imgF, values=mask_options, command=mask_menu_update)
 mask_menu.grid(row = selectionButtonsRow, column = 1)
 
@@ -250,14 +249,14 @@ entry_mask_size.grid(row = entrySlidersRow, column = 1, padx = 0, pady = 0, stic
 entry_mask_size.set(1.0)
 
 """ Placeholder for the recovered FFT image """
-FFT_recovered_img_label = ctk.CTkLabel(imgF, text="NO RECOVERED IMAGE", width=renderImage, height=renderImage, fg_color="black")
+FFT_recovered_img_label = ctk.CTkLabel(imgF, text="NO RECOVERED IMAGE", width=renderImage, height=renderImage, fg_color="orange")
 FFT_recovered_img_label.grid(row = firstImageRow, column = 2, padx = 0, pady = 0, sticky = "")
 
 FR_image_title = ctk.CTkLabel(imgF, text = "FFT RECOVERED IMAGE", corner_radius=0)
 FR_image_title.grid(row=firstImageTitleRow, column = 2)
 
 """ Placeholder for the convolution mask """
-CONV_MASK_img_label = ctk.CTkLabel(imgF, text="NO CONV MASK IMAGE", width=renderImage, height=renderImage, fg_color="black")     
+CONV_MASK_img_label = ctk.CTkLabel(imgF, text="NO CONV MASK IMAGE", width=renderImage, height=renderImage, fg_color="orange")     
 CONV_MASK_img_label.grid(row = secondImageRow, column = 1, padx = 0, pady = 0, sticky = "")
 
 CM_image_title = ctk.CTkLabel(imgF, text = "CONV. MASK", corner_radius=0)
@@ -268,7 +267,7 @@ CM_image_title.grid(row=secondImageTitleRow, column = 1)
 CR_image_title = ctk.CTkLabel(imgF, text = "CONV. RECOVERED IMAGE", corner_radius=0)
 CR_image_title.grid(row=secondImageTitleRow, column = 2)
 
-CONV_rec_img_label = ctk.CTkLabel(imgF, text="NO CONV REC IMAGE", width=renderImage, height=renderImage, fg_color="black")
+CONV_rec_img_label = ctk.CTkLabel(imgF, text="NO CONV REC IMAGE", width=renderImage, height=renderImage, fg_color="orange")
 CONV_rec_img_label.grid(row = secondImageRow, column = 2, padx = 0, pady = 0, sticky = "")
 
 
@@ -290,4 +289,3 @@ entry_conv_mask_size.grid(row = entrySlidersRow, column = 2, padx = 0, pady = 0,
 entry_conv_mask_size.set(1.0)
 # Run app
 app.mainloop()
-
