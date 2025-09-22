@@ -102,8 +102,9 @@ def updateAll():
     convMask = (fft.createConvMask(specMask, MaskSize=fft.conv_mask_size))
 
     convMask = convMask / convMask.max()  
-    convMask = (convMask * 255).astype(np.uint8)
 
+    convMask = (convMask * 255).astype(np.uint8)
+    print(convMask.shape)
     TK_CONV_mask_image = ImageTk.PhotoImage(Image.fromarray(convMask).resize((renderImage, renderImage)))
 
     CONV_MASK_img_label.configure(image=TK_CONV_mask_image, text="")

@@ -126,14 +126,14 @@ def createConvMask(fftMask, MaskSize = 1.0):
     
     convMask = np.abs(np.fft.fftshift(np.fft.ifft2(fftMask)))
     
-    nwidth = int(MaskSize * width) 
+    nwidth = int(MaskSize * width / 25) 
     imageSize, trash = fftMask.shape
     center = int(imageSize / 2)
 
-    matrix = np.zeros((2*nwidth, 2*nwidth))
+    matrix = np.zeros((2*nwidth + 1, 2*nwidth + 1))
 
-    for i in range(2*nwidth):
-        for j in range(2*nwidth):
+    for i in range(2*nwidth + 1):
+        for j in range(2*nwidth + 1):
             matrix[i, j] = convMask[center - nwidth + i, center - nwidth + j]
     
 
