@@ -71,7 +71,7 @@ generalMenuTitle = ctk.CTkLabel(generalMenu, text = "GENERAL MASK MENU")
 generalMenuTitle.pack(pady = 10)
 
 # MASK TYPE OPTION BOX 
-maskOptionsBox = ctk.CTkOptionMenu(generalMenu, values = ["square", "circle", "rectangle"])
+maskOptionsBox = ctk.CTkOptionMenu(generalMenu, values = ["square", "circle", "rectangle"], command = B.updateGeneral)
 maskOptionsBox.pack(pady = 10)
 
 
@@ -136,24 +136,31 @@ sepEntry.grid(column = 1, row = 2, pady = 15, padx = 10)
 arg1Entry = ctk.CTkEntry(advancedMenu, placeholder_text = "adv. args 1")
 arg1Entry.grid(column = 0, row = 3, pady = 15, padx = 10)
 
+
 arg2Entry = ctk.CTkEntry(advancedMenu, placeholder_text = "adv. args 2")
 arg2Entry.grid(column = 1, row = 3, pady = 15, padx = 10)
 
+
+restartMaskButton = ctk.CTkButton(advancedMenu, text = "restart mask", command = B.restartMask, width = 30, corner_radius=0, bg_color="red")
+restartMaskButton.grid(column = 0, row = 4, columnspan = 2, pady = 25)
 
 
 """ Mask Image Holder Manu """
 
 mask_image_title = ctk.CTkLabel(maskImageMenu, text = "GENERATED MASK")
-mask_image_title.grid(row = 0, column = 0, columnspan = 2, pady = 20)
+mask_image_title.grid(row = 0, column = 0, columnspan = 3, pady = 20)
 
 mask_image_holder = ctk.CTkLabel(maskImageMenu, width = maskWidth, height = maskWidth, image = convertImage(F.mask, maskWidth), text = "")
-mask_image_holder.grid(row = 1, column = 0, columnspan = 2)
+mask_image_holder.grid(row = 1, column = 0, columnspan = 3)
 
-applyButton = ctk.CTkButton(maskImageMenu, text = "APPLY")
+applyButton = ctk.CTkButton(maskImageMenu, text = "APPLY", command = B.applyChanges, corner_radius=0, height = 45)
 applyButton.grid(row = 2, column = 0, pady = 10)
 
-selectMaskButton = ctk.CTkButton(maskImageMenu, text = "open mask")
-selectMaskButton.grid(row = 2, column = 1)
+selectMaskButton = ctk.CTkButton(maskImageMenu, text = "open mask", width = 80, command=B.loadImage)
+selectMaskButton.grid(row = 2, column = 1, padx = 10, sticky = "e")
+
+saveMaskButton = ctk.CTkButton(maskImageMenu, text = "save mask", width = 80, command = B.saveImage)
+saveMaskButton.grid(row = 2, column = 2, sticky = "w")
 
 
 """ ---------------------------
