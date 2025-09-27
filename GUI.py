@@ -7,11 +7,6 @@ import Fresnel as F     # Python script where there are all the Fresnel function
 import guiButtons as B     # Python script with the functions that each button do 
 
 
-""" -------------------------------
-        IMPORTANT CONSTANTS     """
-
-maskWidth = 450
-difWidth = 450
 
 
 """ -------------------------------
@@ -20,6 +15,8 @@ difWidth = 450
 def convertImage(img, shape):
     """ Takes a numpy matrix and returns a displayable object """
     return ImageTk.PhotoImage( ((Image.fromarray(img)).convert("RGB")).resize((shape, shape), Image.NEAREST) )
+
+
 
 """ -------------------------------
         APP DEFINITION          """
@@ -34,7 +31,19 @@ app.geometry("1280x720")
 
 # Set the geometry of the GUI 
 app.grid_columnconfigure(0, weight = 2)     # The maskMenu will be twice as big as the difraction image 
-app.grid_columnconfigure(1, weight = 1)
+app.grid_columnconfigure(1, weight = 2)
+
+
+
+""" -------------------------------
+        IMPORTANT CONSTANTS     """
+
+maskWidth = 450
+difWidth = 450
+
+doMesh = ctk.BooleanVar(value = False)  # Boolean to know if we want to create a mesh 
+horCheck = ctk.BooleanVar(value = True) # Boolean to create the mesh vertically or horizontally
+
 
 
 """ ---------------------------
@@ -101,43 +110,77 @@ yposSlider = ctk.CTkSlider(generalMenu,
 yposSlider.set(0)
 yposSlider.pack()
 
+
+
+
 """ Advanced Parameters Menu """
+
+advMenuTitle = ctk.CTkLabel(advancedMenu, text = "ADVANCED MASK MENU")
+advMenuTitle.grid(row = 0, column = 0, columnspan = 2, pady = 15)
+
+
+meshCheckBox = ctk.CTkCheckBox(advancedMenu, text = "Create mesh", variable = doMesh)
+meshCheckBox.grid(column = 0, row = 1, padx = 15)
+
+horverCheckBox = ctk.CTkCheckBox(advancedMenu, text = "Horizontal mesh", variable = horCheck)
+horverCheckBox.grid(column = 1, row = 1, padx = 15)
+
+
+repsEntry = ctk.CTkEntry(advancedMenu, placeholder_text = "# wholes")
+repsEntry.grid(column = 0, row = 2, pady = 15, padx = 10)
+
+sepEntry = ctk.CTkEntry(advancedMenu, placeholder_text = "separation")
+sepEntry.grid(column = 1, row = 2, pady = 15, padx = 10)
+
+
+arg1Entry = ctk.CTkEntry(advancedMenu, placeholder_text = "adv. args 1")
+arg1Entry.grid(column = 0, row = 3, pady = 15, padx = 10)
+
+arg2Entry = ctk.CTkEntry(advancedMenu, placeholder_text = "adv. args 2")
+arg2Entry.grid(column = 1, row = 3, pady = 15, padx = 10)
 
 
 
 """ Mask Image Holder Manu """
 
+mask_image_title = ctk.CTkLabel(maskImageMenu, text = "GENERATED MASK")
+mask_image_title.grid(row = 0, column = 0, columnspan = 2, pady = 20)
+
 mask_image_holder = ctk.CTkLabel(maskImageMenu, width = maskWidth, height = maskWidth, image = convertImage(F.mask, maskWidth), text = "")
-mask_image_holder.grid(row = 0, column = 0)
+mask_image_holder.grid(row = 1, column = 0, columnspan = 2)
 
 applyButton = ctk.CTkButton(maskImageMenu, text = "APPLY")
-applyButton.grid(row = 1, column = 0, pady = 10)
+applyButton.grid(row = 2, column = 0, pady = 10)
 
 selectMaskButton = ctk.CTkButton(maskImageMenu, text = "open mask")
-selectMaskButton.grid(row = 2, column = 0)
+selectMaskButton.grid(row = 2, column = 1)
 
 
 """ ---------------------------
         DIFFRACTION MENU    """
-
 # We create a frame for the diffraction image  
 difMenu = ctk.CTkFrame(app)
 # difMenu.grid(column = 1, row = 0, padx = 0, pady = 0, sticky = "")
 difMenu.pack(side="left", expand = True)
 
+
+dif_image_title = ctk.CTkLabel(difMenu, text = "DIFRACTED SIGNAL")
+dif_image_title.grid(row = 0, column = 0, pady = 20)
+
+
 diffImageHolder = ctk.CTkLabel(difMenu, width = difWidth, height = difWidth, image = convertImage(F.mask, difWidth), text = "")
-diffImageHolder.grid(row = 0, column = 0, sticky = "nsew", padx = 0, pady = 0)
+diffImageHolder.grid(row = 1, column = 0, sticky = "nsew", padx = 0, pady = 0)
 
 
 distanceSliderLabel = ctk.CTkLabel(difMenu, text = f"Distance: {F.distance} [mm]")
-distanceSliderLabel.grid(row = 1, column = 0)
+distanceSliderLabel.grid(row = 2, column = 0)
 
 distanceSlider = ctk.CTkSlider(master = difMenu,
                                from_ = 100, to = 5000,
                                number_of_steps = 49,
                                command = B.update_distance_slider)
 distanceSlider.set(1000)
-distanceSlider.grid(row = 2, column = 0)
+distanceSlider.grid(row = 3, column = 0)
 
 
 app.mainloop()
