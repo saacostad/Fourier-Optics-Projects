@@ -19,6 +19,12 @@ ypos = 0
 
 distance = 1000
 
+reps = 5
+
+separation = 10 
+
+args1 = 10 
+args2 = 20
 
 
 def modifyMask(matrix, shape, size = 10, position = (0, 0), kargs = None):
