@@ -1,6 +1,11 @@
 import customtkinter as ctk 
 import Fresnel as F 
 import __main__ as G
+from PIL import Image
+from tkinter import filedialog 
+import numpy as np 
+
+
 
 """ ---------------------------------
     BUTTONS FOR DIFFRACTION IMAGE """
@@ -18,13 +23,98 @@ def update_distance_slider(value):
 def update_size_slider(value):
     F.size = value 
     G.sizeSliderLabel.configure(text = f"Size: {int(value)}")
-
+    updateGeneral()
 
 def update_xpos_slider(value):
     F.xpos = value 
     G.xposSliderLabel.configure(text = f"Position in x: {int(value)}")
-
+    updateGeneral()
 
 def update_ypos_slider(value):
     F.ypos = value 
     G.yposSliderLabel.configure(text = f"Position in y: {int(value)}")
+    updateGeneral()
+
+
+def updateGeneral():
+    shape = G.maskOptionsBox.get()
+    size = int(G.sizeSlider.get())
+    xpos = int(G.xposSlider.get())
+    ypos = int(G.yposSlider.get())
+    
+    size1 = None 
+    size2 = None 
+
+    if shape == "rectangle":
+       
+        if G.arg1Entry.get() == "":
+            size1 = 4*size 
+        else:
+            size1 = int(int(G.arg2Entry.get()) * size / 10)
+
+        if G.arg2Entry.get() == "":
+            size2 = size 
+        else: 
+            size2 = int(int(G.arg1Entry.get()) * size / 10)
+ 
+
+    tempMask = F.mask.copy()
+
+    F.modifyTempMask(tempMask, shape, size, (xpos, ypos), kargs=[size1, size2])
+
+    G.mask_image_holder.configure(image = G.convertImage(tempMask, G.maskWidth), text = "")
+
+
+def applyChanges():
+    shape = G.maskOptionsBox.get()
+    size = int(G.sizeSlider.get())
+    xpos = int(G.xposSlider.get())
+    ypos = int(G.yposSlider.get())
+
+
+    size1 = None 
+    size2 = None 
+
+    if shape == "rectangle":
+       
+        if G.arg1Entry.get() == "":
+            size1 = 4*size 
+        else:
+            size1 = int(int(G.arg2Entry.get()) * size / 10)
+
+        if G.arg2Entry.get() == "":
+            size2 = size 
+        else: 
+            size2 = int(int(G.arg1Entry.get()) * size / 10)
+
+
+    F.modifyMask(F.mask, shape, size, (xpos, ypos), mode = 1, kargs=[size1, size2])
+
+    G.mask_image_holder.configure(image = G.convertImage(F.mask, G.maskWidth), text = "")
+
+
+
+
+
+def restartMask():
+    F.mask[::, ::] = np.zeros((F.width, F.width))
+    updateGeneral()
+
+def saveImage():
+    im_to_save = Image.fromarray((F.mask * 255).astype(np.uint8))
+
+    filepath = filedialog.asksaveasfilename(
+                defaultextension=".png"
+            )
+
+    if filepath:
+        im_to_save.save(filepath)
+
+
+def loadImage():
+    filepath = filedialog.askopenfilename()
+
+    if filepath:
+        F.mask[::, ::] = np.array(Image.open(filepath)) / 255 
+
+    G.mask_image_holder.configure(image = G.convertImage(F.mask, G.maskWidth), text = "")
