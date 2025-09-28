@@ -59,15 +59,29 @@ def updateGeneral(opt = None):
  
 
     tempMask = F.mask.copy()
+    
 
-    F.modifyTempMask(tempMask, shape, size/F.dx, (xpos, ypos), kargs=[size1, size2])
+    if G.doMesh.get():
+
+        if G.repsEntry.get() == "":
+            reps = 3 
+        else:
+            reps = int(G.repsEntry.get())
+
+        if G.sepEntry.get() == "":
+            seps = 100 
+        else: 
+            seps = int(G.sepEntry.get())
+
+        F.createGrid(tempMask, shape, size, int(reps), seps, xpos, ypos, size1, size2, not G.horCheck.get())
+    else:
+        F.modifyTempMask(tempMask, shape, size, (xpos, ypos), kargs=[size1, size2])
+
 
     G.mask_image_holder.configure(image = G.convertImage(tempMask, G.maskWidth), text = "")
 
     dif_image = F.ft_Fresnel(tempMask, F.distance)
-
     G.diffImageHolder.configure(image = G.convertImage(dif_image, G.difWidth))
-
 
 
 def applyChanges():
@@ -93,7 +107,22 @@ def applyChanges():
             size2 = int(int(G.arg1Entry.get()) * size / 10)
 
 
-    F.modifyMask(F.mask, shape, size, (xpos, ypos), mode = 1, kargs=[size1, size2])
+    if G.doMesh.get():
+
+        if G.repsEntry.get() == "":
+            reps = 3 
+        else:
+            reps = int(G.repsEntry.get())
+
+        if G.sepEntry.get() == "":
+            seps = 100 
+        else: 
+            seps = int(G.sepEntry.get())
+
+        F.createGrid(F.mask, shape, size, int(reps), seps, xpos, ypos, size1, size2, not G.horCheck.get())
+    else:
+        F.modifyMask(F.mask, shape, size, (xpos, ypos), mode = 1, kargs=[size1, size2])
+
 
     G.mask_image_holder.configure(image = G.convertImage(F.mask, G.maskWidth), text = "")
 

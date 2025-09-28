@@ -56,15 +56,18 @@ def modifyTempMask(tempMask, shape, size, position = (0, 0), kargs = None):
 
 
 
-def createGrid(matrix, shape, size, reps, separation, arg1 = None, args2 = None):
+def createGrid(matrix, shape, size, reps, separation, position2, position1, arg1 = None, arg2 = None, hor = True,):
     """ Creates a grid of a given shape """
-    return None 
-
-
     
-    
+    reps *= 2
 
-    
+    for z in range(int(-(((reps-reps%2 - 4) / 2) + 1) * separation / 2), int((((reps-reps%2 - 4) / 2) + 1) * separation / 2) + 1, separation):
+        
+
+        if hor and position1 + z + width/2 < width and position1 + z + width/2 > 0:
+            modifyTempMask(matrix, shape, size, position = ( position1 + z, position2 ), kargs=(arg1, arg2))
+        elif not hor and position2 + z + width/2 < width and position2 + z + width/2 > 0:
+            modifyTempMask(matrix, shape, size, position = ( position1, position2 + z), kargs=(arg1, arg2))
 
 
 
