@@ -14,7 +14,7 @@ import numpy as np
 def update_distance_slider(value):
     F.distance = value
     G.distanceSliderLabel.configure(text = f"Distance: {int(value)} [mm]")
-
+    updateGeneral()
 
 
 """ -------------------------------
@@ -36,7 +36,7 @@ def update_ypos_slider(value):
     updateGeneral()
 
 
-def updateGeneral():
+def updateGeneral(opt = None):
     shape = G.maskOptionsBox.get()
     size = int(G.sizeSlider.get())
     xpos = int(G.xposSlider.get())
@@ -60,9 +60,14 @@ def updateGeneral():
 
     tempMask = F.mask.copy()
 
-    F.modifyTempMask(tempMask, shape, size, (xpos, ypos), kargs=[size1, size2])
+    F.modifyTempMask(tempMask, shape, size/F.dx, (xpos, ypos), kargs=[size1, size2])
 
     G.mask_image_holder.configure(image = G.convertImage(tempMask, G.maskWidth), text = "")
+
+    dif_image = F.ft_Fresnel(tempMask, F.distance)
+
+    G.diffImageHolder.configure(image = G.convertImage(dif_image, G.difWidth))
+
 
 
 def applyChanges():

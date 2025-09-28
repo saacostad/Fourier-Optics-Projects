@@ -183,8 +183,8 @@ distanceSliderLabel = ctk.CTkLabel(difMenu, text = f"Distance: {F.distance} [mm]
 distanceSliderLabel.grid(row = 2, column = 0)
 
 distanceSlider = ctk.CTkSlider(master = difMenu,
-                               from_ = 100, to = 5000,
-                               number_of_steps = 49,
+                               from_ = 50000, to = 500000,
+                               number_of_steps = 100,
                                command = B.update_distance_slider)
 distanceSlider.set(1000)
 distanceSlider.grid(row = 3, column = 0)

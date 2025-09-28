@@ -5,10 +5,10 @@ from numpy.matrixlib import matrix
 
 
 
-width = 481
+width = 1081
 center = (width // 2) + 1
 lamb = 633e-6                   # Wavelenght He-Ne given in [mm]
-
+dx = dy = 20000/width # [mu m]
 
 
 mask = np.zeros((width, width), dtype = bool)
@@ -70,13 +70,9 @@ def createGrid(matrix, shape, size, reps, separation, arg1 = None, args2 = None)
 
 def ft_Fresnel(mask, d):
     """ Applies the Fourier Transform needed to see the difraction pattern """    
-    eulerMask = np.fromfunction(lambda x, y: np.exp(1j * np.pi / (d * lamb) * ( (x - center)**2 + (y - center)**2)), (width, width))
-    
-    plt.imshow(np.real(eulerMask))
-    plt.show()
-
-    tempFT = np.fft.fft2( mask * eulerMask )
-
+    eulerMask = np.fromfunction(lambda x, y: np.exp(1j * np.pi / (d * lamb) * ( (x*dx - center*dx)**2 + (y*dy - center*dy)**2)), (width, width))
+        
+    tempFT = np.fft.fft2( (mask) * eulerMask )
     return np.abs(np.fft.fftshift(tempFT))**2
 
 
