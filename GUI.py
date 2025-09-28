@@ -14,7 +14,7 @@ import guiButtons as B     # Python script with the functions that each button d
 
 def convertImage(img, shape):
     """ Takes a numpy matrix and returns a displayable object """
-    return ImageTk.PhotoImage( ((Image.fromarray(img)).convert("RGB")).resize((shape, shape), Image.NEAREST) )
+    return ImageTk.PhotoImage( ((Image.fromarray(img))).resize((shape, shape)) )
 
 
 
@@ -179,7 +179,7 @@ diffImageHolder = ctk.CTkLabel(difMenu, width = difWidth, height = difWidth, ima
 diffImageHolder.grid(row = 1, column = 0, sticky = "nsew", padx = 0, pady = 0)
 
 
-distanceSliderLabel = ctk.CTkLabel(difMenu, text = f"Distance: {F.distance} [mm]")
+distanceSliderLabel = ctk.CTkLabel(difMenu, text = f"Distance: {F.distance} [mu m]")
 distanceSliderLabel.grid(row = 2, column = 0)
 
 distanceSlider = ctk.CTkSlider(master = difMenu,

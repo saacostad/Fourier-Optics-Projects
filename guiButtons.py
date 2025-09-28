@@ -13,7 +13,7 @@ import numpy as np
 
 def update_distance_slider(value):
     F.distance = value
-    G.distanceSliderLabel.configure(text = f"Distance: {int(value)} [mm]")
+    G.distanceSliderLabel.configure(text = f"Distance: {int(value)} [mu m]")
     updateGeneral()
 
 
@@ -73,15 +73,19 @@ def updateGeneral(opt = None):
         else: 
             seps = int(G.sepEntry.get())
 
-        F.createGrid(tempMask, shape, size, int(reps), seps, xpos, ypos, size1, size2, not G.horCheck.get())
+        F.createGrid(tempMask, shape, int(size * 10 / F.dx), int(reps), seps, xpos, ypos, size1, size2, not G.horCheck.get())
     else:
-        F.modifyTempMask(tempMask, shape, size, (xpos, ypos), kargs=[size1, size2])
+        F.modifyTempMask(tempMask, shape, int(size * 10 / F.dx), (xpos, ypos), kargs=[size1, size2])
 
 
     G.mask_image_holder.configure(image = G.convertImage(tempMask, G.maskWidth), text = "")
 
     dif_image = F.ft_Fresnel(tempMask, F.distance)
-    G.diffImageHolder.configure(image = G.convertImage(dif_image, G.difWidth))
+
+    Amin, Amax = dif_image.min(), dif_image.max()
+    dif_scaled = (dif_image - Amin) / (Amax - Amin) * 255
+
+    G.diffImageHolder.configure(image = G.convertImage(dif_scaled, G.difWidth))
 
 
 def applyChanges():
