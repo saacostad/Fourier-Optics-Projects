@@ -3,7 +3,7 @@ import matplotlib.pyplot as plt
 from PIL import Image, ImageTk 
 
 
-import Fresnel as F     # Python script where there are all the Fresnel functions needed
+import Difraction as F     # Python script where there are all the Fresnel functions needed
 import guiButtons as B     # Python script with the functions that each button do 
 
 

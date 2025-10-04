@@ -1,5 +1,5 @@
 import customtkinter as ctk 
-import Fresnel as F 
+import Difraction as F 
 import __main__ as G
 from PIL import Image
 from tkinter import filedialog 
@@ -81,7 +81,11 @@ def updateGeneral(opt = None):
     G.mask_image_holder.configure(image = G.convertImage(tempMask, G.maskWidth), text = "")
 
     dif_image = F.ft_Fresnel(tempMask, F.distance)
-
+    
+    # print(dif_image)
+    #
+    # Amin, Amax = dif_image.min(), dif_image.max()
+    # dif_scaled = dif_image-Amin
     Amin, Amax = dif_image.min(), dif_image.max()
     dif_scaled = (dif_image - Amin) / (Amax - Amin) * 255
 
