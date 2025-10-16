@@ -11,13 +11,14 @@ def cropMatrix(matrix, M):
 
     elif M < N:
         # Center crop
-        start = (N - M) // 2
-        end = start + M
+        start = int((N - M) // 2)
+        end = int(start + M)
+    
         return matrix[start:end, start:end]
 
     else:
         # Center pad
-        pad_total = M - N
+        pad_total = int(M - N)
         pad_before = pad_total // 2
         pad_after = pad_total - pad_before
         return np.pad(matrix, ((pad_before, pad_after), (pad_before, pad_after)), mode='constant')
