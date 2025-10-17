@@ -52,7 +52,6 @@ def createPupil(pSize, As, dz, size = N):
     
     W = np.fromfunction(Wfun, (size, size), dtype=float)
     
-    print(Wfun(1, 1))
 
     return mask * np.exp(1j * 2 * np.pi / lamb * W) 
 
@@ -92,18 +91,52 @@ def createImage(objIm, P):
     PSF = np.abs(np.fft.fftshift(np.fft.fft2( P )))**2 
     Ig = createIg(objIm, C) 
 
-    return np.abs(fftconvolve(Ig, PSF))
+
+    return np.abs(fftconvolve(Ig, PSF, mode = "same"))
+
+
+
+
+fig, axes = plt.subplots(nrows = 6, ncols = 9, figsize = (14, 8.5))
+
+for a in range(6):
+    for _dz in range(9):
+
+        # The pupil has to be from 100 to 400 pixels wide
+        pupil = createLens(6000, As = a*10 / (2 * f**2), dz = -10 + _dz * 2.5)
+
+        img = np.array(Img.open("img.TIF")) 
+        resultingImage = createImage(img, pupil)
+
+        ax = axes[a, _dz]
+        ax.imshow(MO.cropMatrix(resultingImage, 480), cmap = "viridis")
+
+        if a == 5: 
+            ax.set_xlabel(rf"$\Delta z = {-10 + _dz * 2.5}$", fontsize = 14)
+            ax.tick_params(left=False, bottom=False, labelleft=False, labelbottom=False)
+
+        if _dz == 0:
+            ax.set_ylabel(rf"$a_s = {a*2}$", fontsize = 14)
+            ax.tick_params(left=False, bottom=False, labelleft=False, labelbottom=False)
+        
+        if a != 5 and _dz != 0: 
+            ax.set_axis_off()
+
+
+# Add global labels
+# fig.text(0.5, 0.04, r'$\Delta z$ [mm]', ha='center', fontsize=30)
+# fig.text(0.04, 0.5, r'$a_s', va='center', rotation='vertical', fontsize=30)
+# plt.savefig("6mm paper.png", bbox_inches = 'tight', pad_inches = 0)
+plt.show()
 
 
 # The pupil has to be from 100 to 400 pixels wide
-pupil = createLens(4000, As = 0, dz = 5)
-
-img = np.array(Img.open("img.TIF")) 
-
-
-
-resultingImage = createImage(img, pupil)
-
-plt.imshow(resultingImage)
-plt.imshow()
-plt.savefig("img.png")
+# pupil = createLens(4000, As = 0, dz = -10)
+#
+#
+# img = np.array(Img.open("img.TIF")) 
+# resultingImage = createImage(img, pupil)
+#
+# plt.imshow(resultingImage, cmap = "viridis")
+# plt.axis("off")
+# plt.savefig("d-10.png")
