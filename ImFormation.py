@@ -39,17 +39,16 @@ def createW(As, dz, center):
 def createPupil(pSize, As, dz, size = N):
     """ Creates a mask which will represent the pupil over the lens """ 
 
+    #  We create a centered round pupil
     y, x = np.ogrid[:size, :size]
     center = size // 2 
-
     pupil = (x - center)**2 + (y - center)**2 <= pSize**2 
-
     mask = np.zeros((size, size))
-
     mask[pupil] = 1
     
+
+    # We add the aberrations
     Wfun = createW(As, dz, center) 
-    
     W = np.fromfunction(Wfun, (size, size), dtype=float)
     
 
@@ -97,13 +96,21 @@ def createImage(objIm, P):
 
 
 
+"""
+______________________________
+GRAPH THE IMAGES NEEDED 
+------------------------------
+"""
+
+
+
 fig, axes = plt.subplots(nrows = 6, ncols = 9, figsize = (14, 8.5))
 
 for a in range(6):
     for _dz in range(9):
 
         # The pupil has to be from 100 to 400 pixels wide
-        pupil = createLens(6000, As = a*10 / (2 * f**2), dz = -10 + _dz * 2.5)
+        pupil = createLens(1000, As = a*10 / (2 * f**2), dz = -10 + _dz * 2.5)
 
         img = np.array(Img.open("img.TIF")) 
         resultingImage = createImage(img, pupil)
@@ -124,19 +131,58 @@ for a in range(6):
 
 
 # Add global labels
-# fig.text(0.5, 0.04, r'$\Delta z$ [mm]', ha='center', fontsize=30)
-# fig.text(0.04, 0.5, r'$a_s', va='center', rotation='vertical', fontsize=30)
-# plt.savefig("6mm paper.png", bbox_inches = 'tight', pad_inches = 0)
+fig.text(0.5, 0.04, r'$\Delta z$ [mm]', ha='center', fontsize=30)
+fig.text(0.04, 0.5, r'$a_s$', va='center', rotation='vertical', fontsize=30)
+plt.savefig("1mm paper in pdf.pdf", bbox_inches = 'tight', pad_inches = 0)
 plt.show()
 
 
-# The pupil has to be from 100 to 400 pixels wide
-# pupil = createLens(4000, As = 0, dz = -10)
-#
-#
+
+
+
+""" 
+_____________________________________________________
+SEARCH FOR THE BEST CORRECTOR OF SPHERICAL ABERRATION
+-----------------------------------------------------
+"""
+
 # img = np.array(Img.open("img.TIF")) 
-# resultingImage = createImage(img, pupil)
 #
-# plt.imshow(resultingImage, cmap = "viridis")
-# plt.axis("off")
-# plt.savefig("d-10.png")
+#
+# # The pupil has to be from 100 to 400 pixels wide
+# pupil = createLens(10000, As = 0, dz = 0)
+#
+# perfectImage = createImage(img, pupil)
+# plt.imshow(perfectImage, cmap = "viridis")
+# plt.savefig("perfectImage.png")
+# plt.show()
+
+# best_z = -20 
+# best_R2 = np.inf
+# best_imag = None 
+#
+# for z in [-15, -9]:
+#
+#     pupil = createLens(2000, As = 5 / (2 * f**2), dz = z)
+#     newImg = createImage(img, pupil)
+#
+#     rest = perfectImage - newImg
+#
+#     R2 = np.linalg.norm(rest)**2 
+#     
+#     print(R2)
+#     plt.imshow(rest)
+#     plt.show()
+#     if R2 < best_R2:
+#         best_R2 = R2 
+#         best_z = z 
+#         best_imag = newImg 
+#     
+#     plt.imshow(newImg)
+#     plt.show()
+#
+# print(f"Best dz is: {best_z}")
+# print(f"R2: {best_R2}")
+#
+
+#
