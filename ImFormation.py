@@ -146,43 +146,43 @@ SEARCH FOR THE BEST CORRECTOR OF SPHERICAL ABERRATION
 -----------------------------------------------------
 """
 
-# img = np.array(Img.open("img.TIF")) 
-#
-#
-# # The pupil has to be from 100 to 400 pixels wide
-# pupil = createLens(10000, As = 0, dz = 0)
-#
-# perfectImage = createImage(img, pupil)
-# plt.imshow(perfectImage, cmap = "viridis")
-# plt.savefig("perfectImage.png")
-# plt.show()
+img = np.array(Img.open("img.TIF")) 
 
-# best_z = -20 
-# best_R2 = np.inf
-# best_imag = None 
-#
-# for z in [-15, -9]:
-#
-#     pupil = createLens(2000, As = 5 / (2 * f**2), dz = z)
-#     newImg = createImage(img, pupil)
-#
-#     rest = perfectImage - newImg
-#
-#     R2 = np.linalg.norm(rest)**2 
-#     
-#     print(R2)
-#     plt.imshow(rest)
-#     plt.show()
-#     if R2 < best_R2:
-#         best_R2 = R2 
-#         best_z = z 
-#         best_imag = newImg 
-#     
-#     plt.imshow(newImg)
-#     plt.show()
-#
-# print(f"Best dz is: {best_z}")
-# print(f"R2: {best_R2}")
-#
 
-#
+# The pupil has to be from 100 to 400 pixels wide
+pupil = createLens(10000, As = 0, dz = 0)
+
+perfectImage = createImage(img, pupil)
+plt.imshow(perfectImage, cmap = "viridis")
+plt.savefig("perfectImage.png")
+plt.show()
+
+best_z = -20 
+best_R2 = np.inf
+best_imag = None 
+
+for z in [-15, -9]:
+
+    pupil = createLens(2000, As = 5 / (2 * f**2), dz = z)
+    newImg = createImage(img, pupil)
+
+    rest = perfectImage - newImg
+
+    R2 = np.linalg.norm(rest)**2 
+    
+    print(R2)
+    plt.imshow(rest)
+    plt.show()
+    if R2 < best_R2:
+        best_R2 = R2 
+        best_z = z 
+        best_imag = newImg 
+    
+    plt.imshow(newImg)
+    plt.show()
+
+print(f"Best dz is: {best_z}")
+print(f"R2: {best_R2}")
+
+
+
